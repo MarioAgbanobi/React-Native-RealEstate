@@ -19,9 +19,7 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return null; // Or a loading indicator
-  }
+  if (!fontsLoaded) return null; // Or a loading indicator
 
-  return <Stack />;
+  return <Stack screenOptions={{ headerShown: false }}/>;
 }
