@@ -69,7 +69,11 @@ export async function getCurrentUser() {
         const user = await account.get();
 
         if (user && user.$id) {
-            const userAvatar = avatar.getInitials(user.name);
+            const userAvatar = `${config.Endpoint}/avatars/initials?name=${encodeURIComponent(
+        user.name || "User"
+      )}&project=${config.ProjectId}`;
+
+            // console.log(userAvatar)
 
             return {
                 $id: user.$id,

@@ -1,9 +1,11 @@
-import { View, Text, ScrollView, Image, TouchableOpacity, ImageSourcePropType } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { settings } from '@/constants/data'
 import icons from '@/constants/icons'
 import images from '@/constants/images'
-import { settings } from '@/constants/data'
+import { logout } from '@/lib/appwrite'
+import { useGlobalContext } from '@/lib/global-provider'
+import React from 'react'
+import { Alert, Image, ImageSourcePropType, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 interface SettingsItemProps {
   icon: ImageSourcePropType;
@@ -15,121 +17,116 @@ interface SettingsItemProps {
 
 const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true}: SettingsItemProps) => (
   <TouchableOpacity
-  onPress={onPress}
-  className='flex flex-row items-center justify-between py-3'
+    onPress={onPress}
+    className='flex flex-row items-center justify-between py-3'
   >
-    <View
-    className='flex flex-row items-center gap-3'
-    >
+    <View className='flex flex-row items-center gap-3'>
       <Image 
-      source={icon}
-      className='size-6'
+        source={icon}
+        className='size-6'
       />
-      <Text
-      className={`text-lg font-rubik-medium text-black-300 ${textStyle}`}
-      >{title}</Text>
+      <Text className={`text-lg font-rubik-medium text-black-300 ${textStyle}`}>
+        {title}
+      </Text>
     </View>
 
-    {showArrow && <Image 
-    source={icons.rightArrow}
-    className='size-5'
-    />}
+    {showArrow && (
+      <Image 
+        source={icons.rightArrow}
+        className='size-5'
+      />
+    )}
   </TouchableOpacity>
 )
 
 const Profile = () => {
-  const handleLogout = async () => {
+  const { user, refetch } = useGlobalContext();
 
+  const handleLogout = async () => {
+    const result = await logout();
+
+    if (result) {
+      Alert.alert("Success", "You have been logged out successfully");
+      await refetch(); // Refresh user state after logout
+    } else {
+      Alert.alert("Error", "An error occurred while logging out");
+    }
   }
 
   return (
-    <SafeAreaView
-    className='h-full bg-white'
-    >
+    <SafeAreaView className='h-full bg-white'>
       <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerClassName='pb-32 px-7'
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName='pb-32 px-7'
       >
-        <View
-        className='flex flex-row items-center justify-between mt-5'
-        >
-          <Text
-          className='text-xl font-rubik-bold'
-          >
+        <View className='flex flex-row items-center justify-between mt-5'>
+          <Text className='text-xl font-rubik-bold'>
             Profile
           </Text>
           <Image 
-          source={icons.bell}
-          className='size-5'
+            source={icons.bell}
+            className='size-5'
           />
         </View>
 
-
-        <View
-        className='flex-row justify-center flex mt-5'
-        >
-          <View
-          className='flex flex-col items-center relative mt-5'
-          >
+        <View className='flex-row justify-center flex mt-5'>
+          <View className='flex flex-col items-center relative mt-5'>
             <Image 
-            source={images.avatar}
-            className='size-40 relative rounded-full'
+              source={
+                user?.avatar 
+                  ? { uri: user?.avatar }
+                  : images.avatar
+              }
+              className='size-40 relative rounded-full'
             />
 
-            <TouchableOpacity
-            className='absolute bottom-12 right-4'
-            >
+            <TouchableOpacity className='absolute bottom-12 right-4'>
               <Image 
-              source={icons.edit}
-              className='size-7'
+                source={icons.edit}
+                className='size-7'
               />
             </TouchableOpacity>
 
-            <Text
-            className='font-rubik-semibold text-2xl mt-2'
-            >
-              Mario Agbanobi
+            <Text className='font-rubik-semibold text-2xl mt-2'>
+              {user?.name || 'Guest User'}
             </Text>
+
+            <Text className='text-xs text-gray-500'>
+              {user?.email || 'No email'}
+            </Text>
+
           </View>
         </View>
 
-
         <View className='flex flex-col mt-10'>
           <SettingsItem 
-          icon={icons.calendar}
-          title='My Bookings'
+            icon={icons.calendar}
+            title='My Bookings'
           />
           <SettingsItem 
-          icon={icons.wallet}
-          title='Payments'
+            icon={icons.wallet}
+            title='Payments'
           />
         </View>
 
-
-        <View
-        className='flex flex-col mt-5 border-t pt-5 border-primary-200'
-        >
+        <View className='flex flex-col mt-5 border-t pt-5 border-primary-200'>
           {settings.slice(2).map((item, index) => (
             <SettingsItem 
-            key={index}
-            {...item}
+              key={index}
+              {...item}
             />
           ))}
         </View>
 
-
-        <View
-        className='flex flex-col mt-5 border-t pt-5 border-primary-200'
-        >
+        <View className='flex flex-col mt-5 border-t pt-5 border-primary-200'>
           <SettingsItem 
-          icon={icons.logout}
-          title='logout'
-          textStyle='text-danger'
-          showArrow={false}
-          onPress={handleLogout}
+            icon={icons.logout}
+            title='Logout'
+            textStyle='text-danger'
+            showArrow={false}
+            onPress={handleLogout}
           />
         </View>
-
 
       </ScrollView>
     </SafeAreaView>

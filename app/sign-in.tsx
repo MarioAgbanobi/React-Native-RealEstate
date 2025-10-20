@@ -1,38 +1,45 @@
 import icons from '@/constants/icons'
 import images from '@/constants/images'
-import { login } from '@/lib/appwrite'
+import { login, logout } from '@/lib/appwrite'
 import { useGlobalContext } from '@/lib/global-provider'
+import { Redirect } from 'expo-router'
 import React from 'react'
 import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignIn = () => {
-
   const { refetch, loading, isLoggedIn } = useGlobalContext();
+
+  // Redirect if already logged in
+  if (isLoggedIn) {
+    return <Redirect href="/(root)/(tabs)" />
+  }
 
   const handleLogin = async () => {
     try {
       console.log('Starting login...');
+
+      // Check if user is already logged in, then log out first
+      if (isLoggedIn) {
+        console.log('User already logged in, logging out first...');
+        await logout();
+      }
+      
       const result = await login();
 
       if (result) {
-
         console.log('Login successful');
         await refetch();
-        Alert.alert('Success', 'Logged in successfully!');
-        
+        // User will be auto-redirected due to isLogged check above
       } else {
-
         Alert.alert('Error', 'Failed to login. Please try again.');
-
       }
-      
     } catch (error) {
       console.error('Login error:', error);
       Alert.alert('Error', 'An error occurred during login.');
     }
   }
-  
+
   return (
     <SafeAreaView className='bg-white h-full'>
       <ScrollView contentContainerClassName='h-full'>
