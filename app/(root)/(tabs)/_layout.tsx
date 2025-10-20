@@ -6,7 +6,7 @@ import icons from '@/constants/icons'
 
 const TabIcon = ({ focused, icon, title }: { focused: boolean; icon: any; title: string}) => (
     <View
-    className='flex-1 mt-3 flex flex-ocl items-center'
+    className='flex-1 mt-3 flex flex-col items-center'
     >
         <Image 
         source={icon}
