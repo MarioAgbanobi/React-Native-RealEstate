@@ -1,14 +1,14 @@
-import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import images from '@/constants/images'
 import icons from '@/constants/icons'
+import images from '@/constants/images'
 import { login } from '@/lib/appwrite'
 import { useGlobalContext } from '@/lib/global-provider'
+import React from 'react'
+import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignIn = () => {
 
-  const { refetch, loading, isLogged } = useGlobalContext();
+  const { refetch, loading, isLoggedIn } = useGlobalContext();
 
   const handleLogin = async () => {
     try {
@@ -16,12 +16,17 @@ const SignIn = () => {
       const result = await login();
 
       if (result) {
+
         console.log('Login successful');
         await refetch();
         Alert.alert('Success', 'Logged in successfully!');
+        
       } else {
+
         Alert.alert('Error', 'Failed to login. Please try again.');
+
       }
+      
     } catch (error) {
       console.error('Login error:', error);
       Alert.alert('Error', 'An error occurred during login.');
@@ -50,7 +55,7 @@ const SignIn = () => {
           </Text>
 
           <TouchableOpacity 
-            onPress={handleLogin}  // ✅ Fixed: Removed the arrow function wrapper
+            onPress={handleLogin}  // Removed the arrow function wrapper
             className='bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5'
             disabled={loading}  // Disable button while loading
           >

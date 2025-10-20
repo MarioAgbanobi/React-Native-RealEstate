@@ -1,13 +1,12 @@
 import React, { createContext, useContext, ReactNode } from "react";
-
 import { getCurrentUser } from "./appwrite";
 import { useAppwrite } from "./useAppwrite";
 
 interface GlobalContextType {
-  isLogged: boolean;
+  isLoggedIn: boolean;
   user: User | null;
   loading: boolean;
-  refetch: () => void;
+  refetch: (newParams?: any) => void;
 }
 
 interface User {
@@ -27,17 +26,21 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const {
     data: user,
     loading,
-    refetch,
+    refetch: refetchUser,
   } = useAppwrite({
     fn: getCurrentUser,
   });
 
-  const isLogged = !!user;
+  const refetch = (newParams?: any) => {
+    refetchUser(newParams);
+  };
+
+  const isLoggedIn = !!user;
 
   return (
     <GlobalContext.Provider
       value={{
-        isLogged,
+        isLoggedIn,
         user,
         loading,
         refetch,
@@ -52,7 +55,6 @@ export const useGlobalContext = (): GlobalContextType => {
   const context = useContext(GlobalContext);
   if (!context)
     throw new Error("useGlobalContext must be used within a GlobalProvider");
-
   return context;
 };
 
