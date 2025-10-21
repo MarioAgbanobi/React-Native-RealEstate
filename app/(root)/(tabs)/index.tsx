@@ -1,4 +1,5 @@
 import { FeaturedCard, PostCard } from "@/components/Cards";
+import Filters from "@/components/Filters";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
@@ -43,8 +44,16 @@ export default function Index() {
               </TouchableOpacity>
             </View>
 
+            <View 
+            className="flex flex-row gap-4"
+            >
             <FeaturedCard />
+            <FeaturedCard />
+            </View>
           </View>
+
+          {/* Filters */}
+          <Filters />
 
           {/* PostCard */}
           <View className="mt-5 mb-20">
@@ -59,7 +68,12 @@ export default function Index() {
               </TouchableOpacity>
             </View>
 
-            <PostCard />
+            <View 
+            className="flex flex-row gap-4"
+            >
+              <PostCard />
+              <PostCard />
+            </View>
           </View>
         </View>
       </ScrollView>
