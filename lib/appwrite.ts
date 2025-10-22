@@ -1,11 +1,16 @@
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
-import { Account, Avatars, Client, OAuthProvider } from 'react-native-appwrite';
+import { Account, Avatars, Client, Databases, OAuthProvider } from 'react-native-appwrite';
 
 export const config = {
     Platform: 'com.aime.realesteem',
     ProjectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID,
-    Endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT || 'https://cloud.appwrite.io/v1',
+    Endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT,
+    databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID,
+    agentsId: process.env.EXPO_PUBLIC_APPWRITE_AGENTS_TABLE_ID,
+    galleriesId: process.env.EXPO_PUBLIC_APPWRITE_GALLERIES_TABLE_ID,
+    propertiesId: process.env.EXPO_PUBLIC_APPWRITE_PROPERTIES_TABLE_ID,
+    reviewsId: process.env.EXPO_PUBLIC_APPWRITE_REVIEWS_TABLE_ID
 };
 
 export const client = new Client();
@@ -17,6 +22,7 @@ client
 
 export const avatar = new Avatars(client);
 export const account = new Account(client);
+export const databases = new Databases(client);
 
 export async function login() {
     try {

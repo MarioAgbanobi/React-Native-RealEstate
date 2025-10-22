@@ -3,26 +3,41 @@ import Filters from "@/components/Filters";
 import Search from "@/components/Search";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useGlobalContext } from "@/lib/global-provider";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+  const { user, refetch } = useGlobalContext();
+
   return (
     <SafeAreaView className="bg-white h-full">
-      <ScrollView>
+      <FlatList 
+      data={[1,2,3,4]}
+      renderItem={({item}) => <PostCard /> }
+      keyExtractor={(item) => item.toString()}
+      numColumns={2}
+      contentContainerClassName="pb-32"
+      columnWrapperClassName="flex gap-5 px-5"
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={
         <View className="px-5">
 
           {/* Top Nav */}
           <View className="flex flex-row items-center justify-between mt-5">
             <View className="flex flex-row items-center">
-              <Image source={images.avatar} className="size-12 rounded-full" />
+              <Image source={
+                              user?.avatar 
+                                ? { uri: user?.avatar }
+                                : images.avatar
+                            } className="size-12 rounded-full" />
 
               <View className="flex flex-col items-start ml-2 justify-center">
                 <Text className="font-rubik-medium text-black-100 text-xs">
                   Good Morning
                 </Text>
-                <Text className="font-rubik-medium text-black-300 text-base">
-                  Mario Agbanobi
+                <Text className="font-rubik-medium text-black-300 text-base capitalize">
+                  {user?.name || 'Guest User'}
                 </Text>
               </View>
             </View>
@@ -44,19 +59,22 @@ export default function Index() {
               </TouchableOpacity>
             </View>
 
-            <View 
-            className="flex flex-row gap-4"
-            >
-            <FeaturedCard />
-            <FeaturedCard />
-            </View>
+            <FlatList 
+            data={[1,2,3,4]}
+            renderItem={({item}) => <FeaturedCard /> }
+            keyExtractor={(item) => item.toString()}
+            horizontal
+            bounces={false}
+            contentContainerClassName="flex gap-5 mt-5"
+            showsHorizontalScrollIndicator={false}
+            />
           </View>
 
           {/* Filters */}
           <Filters />
 
           {/* PostCard */}
-          <View className="mt-5 mb-20">
+          <View className="mt-5">
             <View className="flex flex-row items-center justify-between">
               <Text className="font-rubik-bold text-xl">
                 Our Recommendation
@@ -67,16 +85,12 @@ export default function Index() {
                 </Text>
               </TouchableOpacity>
             </View>
-
-            <View 
-            className="flex flex-row gap-4"
-            >
-              <PostCard />
-              <PostCard />
-            </View>
           </View>
+
         </View>
-      </ScrollView>
+      }
+      />
+        
     </SafeAreaView>
   );
 }
