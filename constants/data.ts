@@ -108,11 +108,11 @@ export const facilities = [
     icon: icons.laundry,
   },
   {
-    title: "Car Parking",
+    title: "Car-Parking",
     icon: icons.carPark,
   },
   {
-    title: "Sports Center",
+    title: "Sports-Center",
     icon: icons.run,
   },
   {
@@ -124,7 +124,7 @@ export const facilities = [
     icon: icons.dumbell,
   },
   {
-    title: "Swimming pool",
+    title: "Swimming-pool",
     icon: icons.swim,
   },
   {
@@ -132,7 +132,7 @@ export const facilities = [
     icon: icons.wifi,
   },
   {
-    title: "Pet Center",
+    title: "Pet-Center",
     icon: icons.dog,
   },
 ];
